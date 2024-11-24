@@ -39,7 +39,7 @@ Part 1 – [**Boost converter for PV applications**](Requirement\Project 1\proje
 
 
 
- Part 4 – **System Integration **
+ Part 4 – **System Integration**
 
 - Integration of current control and synchronization
 - Integration of the dc bus voltage control
