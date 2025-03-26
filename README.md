@@ -4,7 +4,7 @@
 
 This project design three-phase PV grid connected system using PLECS. In this README file, the process of design will be introdunce in detail.
 
-![Q53](/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/Q53.png)
+![Q53](./assets/Q53.png)
 
 The simulation content is listed as follows:
 
@@ -55,7 +55,7 @@ The simulation is based on the software [PLECS](https://www.plexim.com/download/
 
 ## Part 1 – **Boost converter for PV applications**
 
-![Circiut diagram of PV system with boost converter](/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/Circiut diagram of PV system with boost converter.png)
+![Circiut diagram of PV system with boost converter](./assets/Circiut diagram of PV system with boost converter.png)
 
 ### Inductor selection
 
@@ -95,13 +95,13 @@ Therefore, we choose $L=2mH$ in our design for some margin.
 
 In our design, the converter has to comply with the requirement that the maximum amplitude of the input voltage components above 150 kHz should be smaller than 5 mV.
 
-<img src="/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/Symplified model of circuit.png" alt="Symplified model of circuit" style="zoom:50%;" />
+<img src="./assets/Symplified model of circuit.png" alt="Symplified model of circuit" style="zoom:50%;" />
 
 **Figure 1: Simplified model of circuit when analyzing capacitor**
 
 Simply modeling the PV string as a current source, we simplify the circuit as shown in **Figure 1**. The alternative part of the current is denoted as $I_c$. **Figure 2** shows the shape of $I_C$.
 
-<img src="/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/Ic.png" alt="Ic" style="zoom: 50%;" />
+<img src="./assets/Ic.png" alt="Ic" style="zoom: 50%;" />
 
 **Figure 2: Current through capacitor vs time**
 
@@ -165,7 +165,7 @@ $$
 \end{aligned}
 $$
 
-![Controlsystem](/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/Controlsystem.png)
+![Controlsystem](./assets/Controlsystem.png)
 
 #### Modeling the system
 
@@ -332,7 +332,7 @@ $$
 
 After redrawing the control loop instead of using the state-space model, we obtain the block diagram shown in Figure below.
 
-![controlloop](/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/controlloop.png)
+![controlloop](./assets/controlloop.png)
 
 #### Current controller design
 
@@ -355,7 +355,7 @@ $$
 $$
 Our PI controllers result in a phase margin of 50$^\circ $ and crossing frequencies of 1/10 of the switching frequency(7 kHz).
 
-![image-20250326205548092](/Users/lucaslee/Desktop/Simulation-of-Distributed-Photovoltaic-Grid-connected-System/assets/image-20250326205548092.png)
+![image-20250326205548092](./assets/image-20250326205548092.png)
 
 Aided by pidtool in Matlab, the parameters of PI controller are:
 $$
