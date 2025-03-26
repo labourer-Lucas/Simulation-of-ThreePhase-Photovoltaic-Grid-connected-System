@@ -199,6 +199,7 @@ $$
 When $S_1$ is off ($S=0$), applying Kirchhoff's Voltage Law, we get:
 
 $$
+
 \begin{aligned}
     L\dot{i_{i}} &= -v_{pv} - i_{L}R_{L} \\
     C\dot{v}_{pv} &= i_L + i_{PV}
