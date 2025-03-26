@@ -198,14 +198,14 @@ $$
 
 When $S_1$ is off ($S=0$), applying Kirchhoff's Voltage Law, we get:
 
-$$\begin{aligned}
+$$
+\begin{aligned}
     L\dot{i_{i}} &= -v_{pv} - i_{L}R_{L} \\
     C\dot{v}_{pv} &= i_L + i_{PV}
 \end{aligned}
 $$
 
 The state-space form of the above equations is:
-
 $$
 \begin{aligned}
     \dot{\mathbf{x}} &= \mathbf{A_2} \mathbf{x} + \mathbf{B_2} \mathbf{u} \\
@@ -219,16 +219,13 @@ $$
     \end{bmatrix}
 \end{aligned}
 $$
-
 The system can be described as:
-
 $$
 \begin{cases}
     \mathbf{\dot{x}} = \mathbf{A_{1}}\mathbf{x} + \mathbf{B_{1}}\mathbf{u}, & t \in [0, dT_s] \\
     \mathbf{\dot{x}} = \mathbf{A_{2}}\mathbf{x} + \mathbf{B_{2}}\mathbf{u}, & t \in [dT_{s}, T_{s}]
 \end{cases}
 $$
-
 State-space averaging techniques are used to obtain a set of equations describing the system over one switching cycle. After applying the averaging technique, we obtain:
 
 $$
@@ -295,7 +292,6 @@ $$
 In this section, we derive the transfer function of the system from the state-space model above.
 
 Since the output of the system is $v_{PV}$ and $i_L$, we can write the output matrix as:
-
 $$
 \mathbf{y}=
 \begin{bmatrix}
@@ -352,11 +348,13 @@ $$
     f_s = 70kHz
 \end{cases}
 $$
+
 Our PI controllers result in a phase margin of 50$^\circ $ and crossing frequencies of 1/10 of the switching frequency(7 kHz).
 
 ![image-20250326205548092](./assets/image-20250326205548092.png)
 
 Aided by pidtool in Matlab, the parameters of PI controller are:
+
 $$
 \begin{cases}
 K_p=0.08197\\
