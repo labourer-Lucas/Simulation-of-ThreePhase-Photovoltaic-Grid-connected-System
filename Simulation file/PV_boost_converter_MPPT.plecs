@@ -885,7 +885,7 @@ Plecs {
       }
       Parameter {
         Variable      "After"
-        Value         "0.5"
+        Value         "1"
         Show          off
       }
       Parameter {
@@ -2496,7 +2496,7 @@ Plecs {
           }
           Parameter {
             Variable      "Ts"
-            Value         "0.002"
+            Value         "0.003"
             Show          off
           }
           Parameter {

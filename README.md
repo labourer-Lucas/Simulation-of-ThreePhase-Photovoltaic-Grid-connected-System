@@ -55,7 +55,7 @@ The simulation is based on the software [PLECS](https://www.plexim.com/download/
 
 ## Part 1 – **Boost converter for PV applications**
 
-![Circiut diagram of PV system with boost converter](./assets/Circiut diagram of PV system with boost converter.png)
+![alt text](<assets/simulaiton of PV boost converter with MPPT.png>)
 
 ### Inductor selection
 
@@ -363,4 +363,95 @@ K_i=3027
 $$
 
 #### Voltage controller design
+
+The voltage controller loop can be redrawn in series, which is show in Figure below.
+
+![voltage loop](<./assets/Simplification of voltage loop.png>)
+
+
+$$
+G_{vi}(s)=\frac{v_{PV}(s)}{i_L(s)}=\frac{G_{vd}(s)}{G_{id}(s)}=\frac{1}{Cs}
+$$
+
+Therefore, the dual closed loop system can be represented as:
+![alt text](<assets/closed loop control.png>)
+
+The simplified system transfer function of inner loop can be written as:
+
+$$
+    G_v(s)=\frac{C_i(s)G_{id}(s)G_{vi}(s)}{1+C_i(s)G_{id}(s)}
+$$
+
+We want a phase margin of $60^\circ $ and a crossing frequency of 1/4 of the crossing frequency of the inner loop(7kHz). 
+
+By the same method, we can get the parameters of the PI controller:
+$$
+C_v(s)=0.091\left(1+\frac{6100}{s}\right)
+$$
+
+### MPPT Algorithm Design
+
+The MPPT algorithm is designed to track the maximum power point of the PV module. The algorithm used in this design is the Perturb and Observe (P&O) method. The P&O method works by perturbing the duty cycle of the boost converter and observing the change in output power. If the power increases, the perturbation is continued in the same direction; if the power decreases, the perturbation is reversed.
+
+The block diagram of the MPPT algorithm is shown in Figure below.
+
+![Flow chart of MPPT algorithm](assets/Flowchart.png)
+
+Based on the flowchart above, we can write the codes to update the reference voltage to track the MPP. The C script is shown below:
+
+```c
+
+// PV voltage and current
+double Vpv;
+double Ipv;
+
+// New and old power
+static double power;
+static double powerOld=0;
+
+// New and old voltage reference 
+static double Vref=400;
+static double VpvOld;
+
+// Voltage variation
+static double DeltaVref = 1.5;
+
+// get voltage and current
+Vpv = InputSignal(0,0);
+Ipv = InputSignal(0,1);
+
+power = Vpv*Ipv;
+
+if(abs(power-powerOld)<1){
+	Vref=Vref;
+}else if(power > powerOld) {
+    if (Vpv > VpvOld) {
+        Vref += DeltaVref; 
+    } else {
+        Vref -= DeltaVref; 
+    }
+} else {
+    if (Vpv > VpvOld) {
+        Vref -= DeltaVref;
+    } else {
+        Vref += DeltaVref;
+    }
+}
+// Save old values for next iteration
+powerOld = power;
+VpvOld = Vpv;
+
+if (Vref < 0) {
+    Vref = 0;
+} else if (Vref > 700) {  
+    Vref = 700;
+}
+
+// Save old values
+powerOld = power;
+VpvOld = Vpv;
+
+// update Vref
+OutputSignal(0,0) = Vref;
+```
 
