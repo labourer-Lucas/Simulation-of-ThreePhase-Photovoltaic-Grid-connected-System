@@ -455,3 +455,106 @@ VpvOld = Vpv;
 OutputSignal(0,0) = Vref;
 ```
 
+## Part 2 – Grid Synchronization (Phase Locked Loop Design)
+
+The Phase-Locked Loop (PLL) in a three-phase inverter is a control system used to synchronize the inverter's output with the grid or a reference signal. It plays a crucial role in ensuring the correct phase and frequency alignment for grid-tied applications and stable operation. In our project, we design and simulate a three-phase phase-lock loop; after that, we implement some methods to improve the performance of PLL.
+
+### Diagram of the SRF-PLL Employing the d-q Transformation
+
+The transformation from $\alpha-\beta$ frame to $d-q$ frame is shown in the equation below:
+
+$$
+    \begin{bmatrix}
+V_d \\
+V_q
+\end{bmatrix}=
+\begin{bmatrix}
+\cos(\theta) & \sin(\theta) \\
+-\sin(\theta) & \cos(\theta)
+\end{bmatrix}
+\begin{bmatrix}
+V_\alpha \\
+V_\beta
+\end{bmatrix}
+$$
+
+Therefore, we can simply draw the SRF-PLL diagram based on the Park transform. The result is shown in Figure below.
+
+![alt text](assets/Q1a.png)
+
+ ### Small Signal Model of the SRF-PLL
+
+![alt text](assets/Q1b1.png)
+
+As shown in Figure above, the actual phase angle of ${V}_{\delta}$ is $ \theta $, and the phase angle estimated by the PLL is $ \hat{\theta} $. The corresponding $ d-q $ and $ \hat{d}-\hat{q} $ are rotating coordinate systems. Define $ \delta = \theta - \hat{\theta} $. When $ \delta $ is very small, $ \sin(\delta) \approx \delta = \theta - \hat{\theta} $, and thus the control block diagram of the PLL can be depicted as:
+![alt text](assets/Q1b2.png)
+
+The open-loop transfer function of the PLL can be expressed as:
+$$
+G_{ol}(s) = \frac{V_\delta}{s} \left(K_p + \frac{K_i}{s}\right)
+$$
+
+The closed-loop transfer function of the PLL can be expressed as:
+
+$$
+G_{cl}(s)=\frac{\hat{\theta}\left(s\right)}{\theta(s)}=\frac{V_\delta K_{p}s+V_\delta K_{i}}{s^{2}+V_\delta K_{p}s+V_\delta K_{i}}
+$$
+where $K_p$,$K_i$ is the proportional and integral gain of the PI controller.
+
+### Design of the PI Controller of the PLL
+
+We are going to design a PI controller that results in an open-loop transfer function with a crossing frequency of 25 Hz and a margin phase of $60^\circ$.
+
+The RMS value of line voltage in our system is 400V. The amplitude \( V_\delta \) can be calculated as:
+
+$$
+V_\delta=\frac{400V}{\sqrt{3}}\times \sqrt{2}=326.6V
+$$
+
+$$
+\omega_c=25\,\text{Hz}\times 2\pi=157.08\,\text{rad/s}
+$$
+
+The phase angle of the open loop system can be written as:
+
+$$
+\angle G_{ol}(j\omega_c) = -90^\circ - \arctan\left(\frac{K_{i}}{K_{p}\,\omega_c}\right)
+$$
+
+In our design, the phase margin is \(60^\circ\), thus,
+
+$$
+\angle G_{ol}(j\omega_c)=-180^\circ + 60^\circ=-120^\circ
+$$
+
+Therefore,
+
+$$
+\arctan\left(\frac{K_i}{K_p \omega_c}\right) = 30^\circ \tag{1}
+$$
+
+The crossover gain at \(\omega_c\), \( \lvert G_{ol}(j\omega_c)\rvert = 1 \):
+
+$$
+\lvert G_{ol}(j\omega_c)\rvert
+= \frac{V_\delta}{\omega_c}\,\sqrt{K_{p}^{2} + \left(\frac{K_{i}}{\omega_c}\right)^{2}}
+$$
+
+We can get the relationship of \(K_p\) and \(K_i\):
+
+$$
+K_p^2 + \left(\frac{K_p}{\sqrt{3}}\right)^2 = \left(\frac{\omega_c}{V_\delta}\right)^2 \tag{2}
+$$
+
+Combine Equation (1) and Equation (2), we can calculate the parameters of PI controller as:
+
+$$
+\begin{cases}
+K_p = \frac{\sqrt{3}}{2} \frac{\omega_c}{V_\delta}=0.416 \\
+K_i = \frac{\omega_c^2}{2V_\delta}=37.8
+\end{cases}
+\tag{3}
+$$
+
+### Normalized PLL
+
